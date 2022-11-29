@@ -11,26 +11,28 @@ const Account = ({ setClose, account, functionName }) => {
         <AiOutlineCloseSquare />
       </div>
 
-      <form onSubmit={handleSubmit()}>
+      <form onSubmit={(e) => e.preventDefault()}>
       <div className="my-5">
-          <label htmlFor="text" className="block text-lg text-black uppercase">
+          <label htmlFor="text"  className="block text-lg text-black uppercase">
             Image
           </label>
-          <input type='text' className="w-full border-2 border-[#333]  outline-none rounded-[5px] h-[50px] p-[5px]"/>
+          <input  type='text' onChange={(e) => setName(e.target.value)}  className="w-full border-2 border-[#333]  outline-none rounded-[5px] h-[50px] p-[5px]"/>
         </div>
         <div className="my-5">
           <label htmlFor="text" className="block text-lg uppercase">
             Image
           </label>
           <input
+           id="acccountAddress"
             type="text"
             placeholder={account || "Enter address.."}
             onChange={(e) => setAccountAddress(e.target.value)}
+            value={accountAddress}
             className="w-full border-2 border-[#333]  outline-none rounded-[5px] h-[50px] p-[5px]"
           />
         </div>
         <button
-        onClick={functionName}
+        onClick={() => functionName(name, accountAddress)}
           type="submit"
           className="text-lg bg-[#FFFFE3] text-[#10100e] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
         >

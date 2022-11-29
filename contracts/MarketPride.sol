@@ -86,10 +86,6 @@ contract MarketPride {
         returns(bool)
     {
         require(checkUserExists(msg.sender) == true, "Accounts need to b created");
-        require(bytes(_name).length>0, "Username cannot be empty");
-        require(bytes(_desc).length>0, "Username cannot be empty");
-        require(bytes(_imageUrl).length>0, "Username cannot be empty");
-        require(bytes(_coverImage).length>0, "Username cannot be empty");
         require(store.length<1, "You cant create multiple store");
          Store memory market = Store({
             name: _name,

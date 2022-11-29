@@ -7,9 +7,10 @@ import Modal from "./Modal";
 import { MarketPrideContext } from "../context/MarketPrideContext";
 import NavMenu from "./NavMenu";
 import Account from "./Account";
+import Link from "next/link";
 
 const Navbar = () => {
-  const { connectWallet, accountCreated, walletAddress, account } =
+  const { connectWallet, accountCreated, walletAddress, currentUserName } =
     useContext(MarketPrideContext);
   const [openNav, setOpenNav] = useState(false);
   const [open, setOpen] = useState(false);
@@ -64,7 +65,6 @@ const Navbar = () => {
         </div>
         <div>
           <div className="text-[8px] hidden  lg:flex items-center space-x-3">
-            {account ? (
               <div>
                 <button
                   onClick={() => setOpen(true)}
@@ -73,16 +73,15 @@ const Navbar = () => {
                   <small>Create Account</small>
                 </button>
               </div>
-            ) : (
               <div>
+                <Link href="/createStore">
                 <button
-                  onClick={() => setOpenModal(true)}
                   className="text-sm bg-[#10100e] text-[#FFFFE3] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
                 >
                   <small>Create Store</small>
                 </button>
+                </Link>
               </div>
-            )}
             {walletAddress ? (
               <div>
                 <button

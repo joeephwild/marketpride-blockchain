@@ -9,14 +9,13 @@ import { MarketPrideContext } from '../context/MarketPrideContext'
 import { useContext } from 'react'
 
 export default function Home() {
-  const{connectingWithSmartContract}= useContext(MarketPrideContext)
+  const{}= useContext(MarketPrideContext)
   const [loading, setLoading] = useState();
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 3000);
-    connectingWithSmartContract()
   }, []);
   return (
     <div >

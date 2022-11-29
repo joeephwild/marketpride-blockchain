@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({path: '.env'})
 require("@nomicfoundation/hardhat-toolbox");
 
 const  ALCHEMY_API_URL = process.env. ALCHEMY_API_URL

@@ -11,17 +11,46 @@ const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 export const MarketPrideProvider = ({ children }) => {
   const [walletAddress, setWalletAddress] = useState("");
   const [error, setError] = useState("");
-  const [contract, setContract] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState("");
   const [store, setStore] = useState([]);
+  const [ifUserExist, setIfUserExist] = useState(false)
+  const [ifStoreUserExist, setIfStoreUserExist] = useState(false)
+  const [currentAccount, setCurrentAccount] = useState('')
+  const [currentUserName, setCurrentUserName] = useState('')
+  const [userStore, setUserStore] = useState({});
+  const [product, setProduct] = useState([]);
   const router = useRouter();
 
   //Fetch data on page load
-  const fetchData = async () => {};
+  const fetchData = async () => {
+    //GET CONTRACT
+    const contract = await connectingWithSmartContract();
+    //GET ACCOUNT
+    setCurrentAccount(walletAddress);
+    //GET USER NAME
+    const user = await contract.getUsername(currentAccount);
+    setCurrentUserName(user);
+    //check if user exist
+    const ifExist = await contract.checkUserExists(currentAccount);
+    setIfUserExist(ifExist);
+    //get all user stores
+    const allStore = await contract.getAllUserStoreAndProducts(currentAccount);
+    setUserStore(allStore);
+    //get if store exist
+    const storeExist = await contract.getIfStoreExist();
+    setIfStoreUserExist(storeExist);
+    //fetch all stores
+    const stores = await contract.getAllStore();
+    setStore(stores);
+    const products = await contract.getAllProduct();
+     setProduct(products);
+  };
 
   useEffect(() => {
     getConnectWallet();
     addWalletListener();
+    fetchData();
   }, [walletAddress]);
 
   //CONNECT WALLET
@@ -71,55 +100,46 @@ export const MarketPrideProvider = ({ children }) => {
 
   //Create an Account
   const accountCreated = async (name, accountAddress) => {
-    if (!name) {
-      toast.custom("missing data");
+    try {
+      // if (name || accountAddress)
+      //   return setError("Name And AccountAddress, cannot be emty");
+
       const contract = await connectingWithSmartContract();
       const getCreatedUser = await contract.createAccount(name);
-      setAccount(getCreatedUser);
-      alert(getCreatedUser);
-    } else {
-      toast.error("User Already Exist");
-      console.log("User Already Exist");
+      setLoading(true);
+      await getCreatedUser.wait();
+      setLoading(false);
+      window.location.reload();
+    } catch (error) {
+      setError("Error while creating your account Please reload browser");
     }
   };
 
-  //Create a store
-  const createAStore = async (formInput, fileUrl, router) => {
-    const [name, description] = formInput;
-    if (!name || !description || !fileUrl) {
-      toast.custom("missing data");
-      alert("data is missing");
-      const datas = JSON.stringify({
-        name,
-        description,
-        imageUrl: fileUrl,
-        coverImage: fileUrl,
-      });
-      const contract = await connectingWithSmartContract();
-      const getCreatedUser = await contract.createStore(
-        name,
-        desc,
-        imageUrl,
-        coverImage,
-        id
-      );
-      setStore(getCreatedUser);
-      alert(getCreatedUser);
+  const createAStore = async (name, description, imageUrl, coverImage) => {
+    if (!name || !description || !imageUrl || !coverImage) {
+      alert("hey fill details up");
       try {
-        const added = await client.add(datas);
-        const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-        return url;
+        // if (name || accountAddress)
+        //   return setError("Name And AccountAddress, cannot be emty");
+  
+        const contract = await connectingWithSmartContract();
+        const getCreatedStore = await contract.createStore(name);
+        setLoading(true);
+        await getCreatedStore.wait();
+        setLoading(false);
+        window.location.reload();
+        router.push('/listproducts')
       } catch (error) {
-        alert("error while creating store upload");
+        setError("Error while creating your account Please reload browser");
       }
     } else {
-      toast.error("User Already Exist");
-      console.log("User Already Exist");
+      alert("hey comeon");
     }
   };
 
   //upload to ipfs
   const uploadToIpfs = async (file) => {
+    const [name, description, image, coverImage] = file;
     try {
       const added = await client.add({ content: file });
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
@@ -150,7 +170,6 @@ export const MarketPrideProvider = ({ children }) => {
         category,
         imgUrl
       );
-      setStore(getListedProducts);
       alert("products listed sucessfully");
       return {
         price,
@@ -173,8 +192,8 @@ export const MarketPrideProvider = ({ children }) => {
         accountCreated,
         account,
         createAStore,
-        connectingWithSmartContract,
         uploadToIpfs,
+        currentUserName
       }}
     >
       {children}

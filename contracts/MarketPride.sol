@@ -25,7 +25,7 @@ contract MarketPride {
     struct Store {
         string name;
         string description;
-        uint256 id;
+        uint id;
         address creator;
         string imageUrl;
         string coverImage;
@@ -81,7 +81,7 @@ contract MarketPride {
     }
 
     //create a store
-    function createStore(string calldata _name, string calldata _desc, string memory _imageUrl, string memory _coverImage, uint256 _id)
+    function createStore(string calldata _name, string calldata _desc, string memory _imageUrl, string memory _coverImage)
         public
         returns(bool)
     {
@@ -93,7 +93,7 @@ contract MarketPride {
             creator: msg.sender,
             imageUrl: _imageUrl,
             coverImage: _coverImage,
-            id: _id
+            id: storeCounter
          });
          stores[storeCounter] = market;
          storeCounter++;

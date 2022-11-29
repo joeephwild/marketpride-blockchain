@@ -22,6 +22,4 @@ export const connectingWithSmartContract = async () => {
     console.log("Something went wrong while connecting with contract");
   }
 };
-
-
   

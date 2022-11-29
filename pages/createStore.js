@@ -4,12 +4,12 @@ import { AiOutlineCloseSquare } from "react-icons/ai";
 import Navbar from '../components/Navbar';
 
 const createStore = () => {
-  const { createAStore, walletAddress, address } = useContext(MarketPrideContext);
+  const { createAStore, walletAddress, address, uploadToIpfs, uploadAStore } = useContext(MarketPrideContext);
   const [desc, setDesc] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [image, setImage] = useState(null);
-  const [coverImage, setCoverImage] = useState(null);
+  const [image, setImage] = useState('');
+  const [coverImage, setCoverImage] = useState('');
   const [account, setAccount] = useState("");
 
 
@@ -26,11 +26,9 @@ const createStore = () => {
                 Cover Image
               </label>
               <input
-                value={coverImage}
                 onChange={(e) => setCoverImage(e.target.value)}
-                type="file"
-                placeholder={address}
-                className="w-full border-2 border-[#333]  outline-none rounded-[5px] h-[50px] p-[5px]"
+                type="text"
+                className="w-full border-2 border-[#333] text-black  outline-none rounded-[5px] h-[50px] p-[5px]"
               />
             </div>
             <div className="my-5">
@@ -38,11 +36,10 @@ const createStore = () => {
                 Image
               </label>
               <input
-                value={image}
                 onChange={(e) => setImage(e.target.value)}
-                type="file"
+                type="text"
                 placeholder={address}
-                className="w-full border-2 border-[#333]  outline-none rounded-[5px] h-[50px] p-[5px]"
+                className="w-full border-2 border-[#333] text-black outline-none rounded-[5px] h-[50px] p-[5px]"
               />
             </div>
             <div className="my-5">
@@ -50,7 +47,6 @@ const createStore = () => {
                 Name
               </label>
               <input
-                value={name}
                 onChange={(e) => setName(e.target.value)}
                 type="text"
                 placeholder="...Store Name"
@@ -63,7 +59,6 @@ const createStore = () => {
                 Description
               </label>
               <textarea
-                value={desc}
                 onChange={(e) => setDesc(e.target.value)}
                 type="text"
                 placeholder="...Description of Store"
@@ -71,7 +66,7 @@ const createStore = () => {
               />
             </div>
             <button
-            onClick={() => createAStore(name, desc,image, coverImage)}
+            onClick={() => createAStore(name, desc, image, coverImage)}
               type="submit"
               className="bg-[#FFFFE3] shadow-lg  shadow-gray-400 text-[#10100e] px-6 py-3.5 rounded-lg"
             >

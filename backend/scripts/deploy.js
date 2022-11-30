@@ -1,6 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
+
   const MarketPride = await hre.ethers.getContractFactory("MarketPride");
   const marketPride = await MarketPride.deploy();
 

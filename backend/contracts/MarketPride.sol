@@ -117,11 +117,7 @@ contract MarketPride {
     ) public {
         require(checkUserExists(msg.sender) == true, "Accounts need to be created");
         require(storeExist == true, "you need to own a store to list products");
-        require(bytes(_name).length>0, "Username cannot be empty");
-        require(bytes(_description).length>0, "Username cannot be empty");
-        require(bytes(_imgUrl).length>0, "Username cannot be empty");
         require(msg.sender == _seller , "you need to be a seller");
-        require(bytes(_category).length>0, "Username cannot be empty");
         Product memory newProduct = Product({
             buyer: address(0),
             seller: msg.sender,

@@ -10,7 +10,7 @@ import Account from "./Account";
 import Link from "next/link";
 
 const Navbar = () => {
-  const { connectWallet, accountCreated, walletAddress, currentUserName } =
+  const { connectWallet, accountCreated, currentAccount, currentUserName } =
     useContext(MarketPrideContext);
   const [openNav, setOpenNav] = useState(false);
   const [open, setOpen] = useState(false);
@@ -82,7 +82,7 @@ const Navbar = () => {
                 </button>
                 </Link>
               </div>
-            {walletAddress ? (
+            {currentAccount ? (
               <div>
                 <button
                   onClick={connectWallet}
@@ -96,7 +96,7 @@ const Navbar = () => {
                     alt="profile"
                   />
                   <small>
-                    {walletAddress.slice(0, 7)}...{walletAddress.slice(38, 42)}
+                    {currentAccount.slice(0, 7)}...{currentAccount.slice(38, 42)}
                   </small>
                 </button>
               </div>
@@ -126,7 +126,7 @@ const Navbar = () => {
         <Account
           setClose={setOpen}
           functionName={accountCreated}
-          account={walletAddress}
+          account={currentAccount}
         />
       ) : (
         ""

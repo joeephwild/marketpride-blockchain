@@ -6,7 +6,20 @@ import axios from "axios";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 
 export const MarketPrideContext = React.createContext();
-const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
+//ipfs configuration 
+const subdomain = "https://ipfs.infura.io:5001/api/v0"
+const INFURA_ID ="2IBwaq8gyu2aOFDFSRUPMSR8cvK"
+const INFURA_SECRET_KEY ="b412376181ed1cf360898eaed01e2f8c"
+const auth =
+    'Basic ' + Buffer.from(INFURA_ID + ':' + INFURA_SECRET_KEY).toString('base64');
+const client = ipfsHttpClient({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+        authorization: auth,
+    },
+});
 
 export const MarketPrideProvider = ({ children }) => {
   const [walletAddress, setWalletAddress] = useState("");
@@ -20,14 +33,17 @@ export const MarketPrideProvider = ({ children }) => {
   const [currentUserName, setCurrentUserName] = useState('')
   const [userStore, setUserStore] = useState({});
   const [product, setProduct] = useState([]);
+  const [image, setImage] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
   const router = useRouter();
 
   //Fetch data on page load
   const fetchData = async () => {
-    //GET CONTRACT
+    try {
+       //GET CONTRACT
     const contract = await connectingWithSmartContract();
     //GET ACCOUNT
-    setCurrentAccount(walletAddress);
+    
     //GET USER NAME
     const user = await contract.getUsername(currentAccount);
     setCurrentUserName(user);
@@ -43,15 +59,20 @@ export const MarketPrideProvider = ({ children }) => {
     //fetch all stores
     const stores = await contract.getAllStore();
     setStore(stores);
+    //fetch all products
     const products = await contract.getAllProduct();
      setProduct(products);
+    } catch (error) {
+      alert('error from useEffect')
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     getConnectWallet();
     addWalletListener();
-    fetchData();
-  }, [walletAddress]);
+    //fetchData();
+  }, []);
 
   //CONNECT WALLET
   const connectWallet = async () => {
@@ -60,7 +81,7 @@ export const MarketPrideProvider = ({ children }) => {
         const account = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-        setWalletAddress(account[0]);
+        setCurrentAccount(account[0]);
       } catch (error) {
         console.log("no network");
       }
@@ -71,12 +92,12 @@ export const MarketPrideProvider = ({ children }) => {
   const addWalletListener = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
       window.ethereum.on("accountsChanged", (accounts) => {
-        setWalletAddress(accounts[0]);
+        setCurrentAccount(accounts[0]);
         console.log(accounts[0]);
       });
     } else {
       /* MetaMask is not installed */
-      setWalletAddress("");
+      setCurrentAccount("");
       console.log("Please install MetaMask");
     }
   };
@@ -89,7 +110,7 @@ export const MarketPrideProvider = ({ children }) => {
       }
       const accounts = await ethereum.request({ method: "eth_accounts" });
       if (accounts.length > 0) {
-        setWalletAddress(accounts[0]);
+        setCurrentAccount(accounts[0]);
       } else {
         console.log("No Accounts found");
       }
@@ -130,27 +151,16 @@ export const MarketPrideProvider = ({ children }) => {
         window.location.reload();
         router.push('/listproducts')
       } catch (error) {
-        setError("Error while creating your account Please reload browser");
+        setError("Error while creating your store Please reload browser");
       }
     } else {
       alert("hey comeon");
     }
   };
+  /**/
 
-  //upload to ipfs
-  const uploadToIpfs = async (file) => {
-    const [name, description, image, coverImage] = file;
-    try {
-      const added = await client.add({ content: file });
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-      return url;
-    } catch (error) {
-      alert("error while uploading");
-    }
-  };
-
-  //List Products
-  const ListProducts = async (
+   //List Products
+   const ListProducts = async (
     seller,
     price,
     rating,
@@ -184,6 +194,18 @@ export const MarketPrideProvider = ({ children }) => {
     }
   };
 
+  //upload to ipfs
+  const uploadToIpfs = async (file) => {
+    try {
+      const added = await client.add({ content: file });
+      const url = `https://ipfs.infura.io:5001/ipfs/${added.path}`;
+      return url;
+    } catch (error) {
+      setError("Error Uploading to IPFS");
+    }
+  };
+ 
+
   return (
     <MarketPrideContext.Provider
       value={{
@@ -193,10 +215,30 @@ export const MarketPrideProvider = ({ children }) => {
         account,
         createAStore,
         uploadToIpfs,
-        currentUserName
+        currentAccount,
+        coverImage,
+        setCoverImage,
+        image,
+        setImage,
       }}
     >
       {children}
     </MarketPrideContext.Provider>
   );
 };
+//how to format a price in ethersjs?
+/* const tx = {
+  to: toAddress,
+  value: ethers.utils.parseEther(value),
+  gasLimit: 50000,
+  nonce: nonce || undefined,
+};
+await signer.sendTransaction(tx);
+
+
+const tx = await contract.safeTransferFrom(from, to, tokenId, amount, [], {
+  gasLimit: 100000,
+  nonce: nonce || undefined,
+}); */
+
+

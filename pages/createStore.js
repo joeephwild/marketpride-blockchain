@@ -1,19 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { MarketPrideContext } from "../context/MarketPrideContext";
-//import { AiOutlineCloseSquare } from "react-icons/ai";
 import Navbar from "../components/Navbar";
-import DropZone from "../components/DropZone";
 import { Uploader } from "uploader";
+import {  useAccount, useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
+import { contractAbi, contractAddress } from "../context/constant";
 
 const createStore = () => {
-  const { createAStore, uploadToIpfs, uploadAStore } =
-    useContext(MarketPrideContext);
   const [desc, setDesc] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
   const [coverImage, setCoverImage] = useState("");
-  //const [account, setAccount] = useState("");
+  const { address} = useAccount()
   const uploader = new Uploader({
     apiKey: "public_kW15az78y4qQXTs4kwHVN73cEhoR",
   });
@@ -34,6 +32,13 @@ const createStore = () => {
       });
   };
 
+  const { config, error } = usePrepareContractWrite({
+    address: contractAddress,
+    abi: contractAbi,
+    functionName: 'createStore',
+    args: [name, desc, image, coverImage]
+  })
+  const { write } = useContractWrite(config)
   return (
     <div className="w-screen h-screen  overflow-x-hidden">
       <Navbar />
@@ -86,7 +91,8 @@ const createStore = () => {
               />
             </div>
             <button
-              onClick={async () => createAStore(name, desc, image, coverImage)}
+            disabled={!write}
+              onClick={async () => write?.(name, desc, image, coverImage)}
               type="submit"
               className="bg-[#FFFFE3] shadow-lg  shadow-gray-400 text-[#10100e] px-6 py-3.5 rounded-lg"
             >

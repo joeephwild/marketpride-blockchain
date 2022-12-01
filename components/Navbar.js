@@ -2,20 +2,22 @@ import React, { useState, useContext } from "react";
 import logo from "../public/images/favicon.svg";
 import avatar from "../public/images/avatar.png";
 import Image from "next/image";
-import { AiOutlineMenu, AiFillShopping } from "react-icons/ai";
+import { AiOutlineMenu} from "react-icons/ai";
 import { MarketPrideContext } from "../context/MarketPrideContext";
 import NavMenu from "./NavMenu";
 import Account from "./Account";
 import Link from "next/link";
+import { Web3Button } from "@web3modal/react";
+import { useAccount, useContractRead } from "wagmi";
+import { contractAbi, contractAddress } from "../context/constant";
 
 const Navbar = () => {
-  const { connectWallet, accountCreated, currentAccount,userName } =
+  const { createAnAccount } =
     useContext(MarketPrideContext);
   const [openNav, setOpenNav] = useState(false);
   const [open, setOpen] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
   const [active, setActive] = useState(1);
-
+  const { address} = useAccount()
   const menuItems = [
     {
       menu: "Home",
@@ -38,6 +40,13 @@ const Navbar = () => {
       links: "/",
     },
   ];
+
+  const name = useContractRead({
+    address: contractAddress,
+    abi: contractAbi,
+    functionName: 'getUsername',
+    args: [address]
+  });
   return (
     <div>
       <nav className="w-lg  cursor-pointer flex items-center justify-between py-2 px-2.5">
@@ -69,7 +78,7 @@ const Navbar = () => {
                   onClick={() => setOpen(true)}
                   className="text-sm bg-[#10100e] text-[#FFFFE3] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
                 >
-                  <small>Create Account</small>
+                  <small>{name ? name.data : "Create account"}</small>
                 </button>
               </div>
               <div>
@@ -77,30 +86,12 @@ const Navbar = () => {
                 <button
                   className="text-sm bg-[#10100e] text-[#FFFFE3] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
                 >
-                  <small>Create Store</small>
+                  <small>Name</small>
                 </button>
                 </Link>
               </div>
-               {currentAccount ? (
-                <div >
-                  <button
-                  className="text-sm bg-[#10100e] flex items-center text-[#FFFFE3] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
-                >
-                  <Image src={avatar} className='h-6 w-6' />
-                  <small>{currentAccount.slice(0, 5)}...{currentAccount.slice(38, 46)}</small>
-                </button>
-                </div>
-               ): (
-                <div>
-                  <button
-                  onClick={() => connectWallet()}
-                  className="text-sm bg-[#10100e] text-[#FFFFE3] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
-                >
-                  <small>Connect</small>
-                </button>
-                </div>
-               )}
               <div className="text-[6px]">
+              <Web3Button />
               </div>
 
           </div>
@@ -116,8 +107,7 @@ const Navbar = () => {
       {open ? (
         <Account
           setClose={setOpen}
-          functionName={accountCreated}
-          account={currentAccount}
+          functionName={createAnAccount}
         />
       ) : (
         ""

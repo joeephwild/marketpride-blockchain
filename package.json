@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^0.8.0",
+    "@web3modal/ethereum": "^2.0.0-beta.7",
+    "@web3modal/react": "^2.0.0-beta.7",
+    "add": "^2.0.6",
     "axios": "^1.2.0",
     "dotenv": "^16.0.3",
     "framer-motion": "^7.6.12",
@@ -22,7 +25,8 @@
     "react-icons": "^4.6.0",
     "uploader": "^2.2.2",
     "wagmi": "^0.8.8",
-    "web3modal": "^1.9.10"
+    "web3modal": "^1.9.10",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@ethersproject/abi": "^6.0.0-beta.3",

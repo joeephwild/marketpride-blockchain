@@ -1,12 +1,16 @@
 import React, { useState, useEffect, createContext, useRef } from "react";
+import { usePrepareContractWrite, useContractWrite } from 'wagmi'
 import { useRouter } from "next/router";
-import { useAccount } from "wagmi";
-import { connectingWithSmartContract } from "../utils/apiFeature";
-import axios from "axios";
-import { create as ipfsHttpClient } from "ipfs-http-client";
-import { ethers } from "ethers";
+import { contractAbi, contractAddress } from "./constant";
+//import { useAccount } from "wagmi";
+//import { connectingWithSmartContract } from "../utils/apiFeature";
+//import axios from "axios";
+//import { create as ipfsHttpClient } from "ipfs-http-client";
+//import { ethers } from "ethers";
+
 export const MarketPrideContext = React.createContext();
 //ipfs configuration
+/*
 const subdomain = "https://ipfs.io/api/v0";
 const INFURA_ID = "2IBwaq8gyu2aOFDFSRUPMSR8cvK";
 const INFURA_SECRET_KEY = "b412376181ed1cf360898eaed01e2f8c";
@@ -20,10 +24,9 @@ const client = ipfsHttpClient({
   headers: {
     authorization: auth,
   },
-});
+});*/
 
 export const MarketPrideProvider = ({ children }) => {
-  const [walletAddress, setWalletAddress] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState("");
@@ -33,12 +36,12 @@ export const MarketPrideProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   //const [currentUserName, setCurrentUserName] = useState(null);
   const [userName, setUserName] = useState("");
-  const [userStore, setUserStore] = useState([]);
+  const [userStore, setUserStore] = useState();
   const [product, setProduct] = useState([]);
   const [singleStore, setSingle] = useState({});
   //const [coverImage, setCoverImage] = useState('');
   const router = useRouter();
-
+/*
   const isMounted = useRef(false);
 
   useEffect(() => {
@@ -81,7 +84,6 @@ export const MarketPrideProvider = ({ children }) => {
     try {
       const contract = await connectingWithSmartContract();
       const stores = await contract.getAllStore();
-      console.log(stores);
       return stores;
     } catch (error) {
       console.log(error);
@@ -138,7 +140,6 @@ export const MarketPrideProvider = ({ children }) => {
         console.log(accounts[0]);
       });
     } else {
-      /* MetaMask is not installed */
       setCurrentAccount("");
       console.log("Please install MetaMask");
     }
@@ -173,7 +174,6 @@ export const MarketPrideProvider = ({ children }) => {
       }
     }
   };
-  /* */
 
   const getUsername = async () => {
     try {
@@ -222,7 +222,7 @@ export const MarketPrideProvider = ({ children }) => {
     }
   };
 
-  /*const uploadToIpfs = async (file) => {
+  const uploadToIpfs = async (file) => {
     try {
       const added = await client.add({ content: file });
       const url = `https://ipfs.io/ipfs/${added.path}`;
@@ -230,9 +230,9 @@ export const MarketPrideProvider = ({ children }) => {
     } catch (error) {
       setError("Error Uploading to IPFS");
     }
-  };*/
-
-  //List Products
+  };
+  
+    //List Products
   const listProducts = async (
     seller,
     price,
@@ -242,39 +242,42 @@ export const MarketPrideProvider = ({ children }) => {
     category,
     imgUrl
   ) => {
-    if (!name || !description || !price || !rating || !category || !imgUrl) {
-      alert("Pls provide necessary details");
-      const contract = await connectingWithSmartContract();
-      const getListedProducts = await contract.listNewProduct(
-        seller,
-        price,
-        rating,
-        name,
-        description,
-        category,
-        imgUrl
-      );
-      alert("products listed sucessfully");
-      return getListedProducts;
-    } else {
-      alert("something went wrong while listing products");
-    }
+   try {
+    const contract = await connectingWithSmartContract();
+    const prices = ethers.utils.parseEther(price, 18).toBigInt()
+    const getListedProducts = await contract.listNewProduct(
+    seller,
+    prices,
+    rating,
+    name,
+    description,
+    category,
+    imgUrl
+    )
+    alert("products listed sucessfully");
+    return getListedProducts;
+   } catch (error) {
+    console.log(error)
+   }
   };
+
+  
+  */
+const createAnAccount = () => {
+  try {
+    
+    return write;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
   //upload to ipfs
 
   return (
     <MarketPrideContext.Provider
       value={{
-        walletAddress,
-        accountCreated,
-        account,
-        createAStore,
-        //uploadToIpfs,
-        currentAccount,
-        connectWallet,
-        userName,
-        listProducts,
+       createAnAccount
       }}
     >
       {children}

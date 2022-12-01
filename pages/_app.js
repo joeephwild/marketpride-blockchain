@@ -1,45 +1,44 @@
 import "../styles/globals.css";
-import "@rainbow-me/rainbowkit/styles.css";
-import {
-  darkTheme,
-  getDefaultWallets,
-  RainbowKitProvider,
-} from "@rainbow-me/rainbowkit";
-import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
 import { AnimatePresence } from "framer-motion";
 import { MarketPrideProvider } from "../context/MarketPrideContext";
+import {
+  EthereumClient,
+  modalConnectors,
+  walletConnectProvider,
+} from "@web3modal/ethereum";
+import { Web3Modal } from "@web3modal/react";
+import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 
-const { chains, provider } = configureChains(
-  [chain.polygonMumbai, chain.polygon, chain.mainnet],
-  [
-    alchemyProvider({
-      apiKey:
-        "https://polygon-mumbai.g.alchemy.com/v2/L3gPc9I3BG4i7oHU7yHQ7nsdlQuTYoQh",
-    }),
-    publicProvider(),
-  ]
-);
+const chains = [chain.polygonMumbai, chain.polygon];
 
-const { connectors } = getDefaultWallets({
-  appName: "MarketPride Commerce",
-  chains,
-});
-
+// Wagmi client
+const { provider } = configureChains(chains, [
+  walletConnectProvider({ projectId: "7720f3937b28964fbc70200760fc56b6" }),
+]);
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors,
+  connectors: modalConnectors({ appName: "MarketPride", chains }),
   provider,
 });
 
+// Web3Modal Ethereum Client
+const ethereumClient = new EthereumClient(wagmiClient, chains);
+
 function MyApp({ Component, pageProps }) {
   return (
+    <>
     <MarketPrideProvider>
       <AnimatePresence mode="wait">
-            <Component {...pageProps} />
+        <WagmiConfig client={wagmiClient} >
+        <Component {...pageProps} />
+        </WagmiConfig>
       </AnimatePresence>
     </MarketPrideProvider>
+    <Web3Modal
+        projectId="7720f3937b28964fbc70200760fc56b6"
+        ethereumClient={ethereumClient}
+      />
+    </>
   );
 }
 

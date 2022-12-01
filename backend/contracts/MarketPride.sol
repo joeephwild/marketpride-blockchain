@@ -50,12 +50,6 @@ contract MarketPride {
     mapping(uint256 => Product) public product;
     mapping(uint256 => Store) public stores;
 
-    event payment(address indexed _from, address indexed _to, uint256 _price);
-
-    constructor(){
-        storeExist == false;
-    }
-
    //check if users exist
     function checkUserExists(address pubkey) public view returns(bool){
         return bytes(userList[pubkey].name).length > 0;
@@ -83,7 +77,6 @@ contract MarketPride {
     //create a store
     function createStore(string calldata _name, string calldata _desc, string memory _imageUrl, string memory _coverImage)
         public
-        returns(bool)
     {
         require(checkUserExists(msg.sender) == true, "Accounts need to b created");
          Store memory market = Store({
@@ -97,16 +90,10 @@ contract MarketPride {
          stores[storeCounter] = market;
          storeCounter++;
          store.push(market);
-         return storeExist = true;
-    }
-
-    function getIfStoreExist() public view returns(bool){
-        return storeExist;
     }
 
     //list a new set of products in the store for sale
     function listNewProduct(
-        address _seller,
         uint256 _price,
         uint256 _rating,
         string memory _name,
@@ -115,8 +102,6 @@ contract MarketPride {
         string memory _imgUrl
     ) public {
         require(checkUserExists(msg.sender) == true, "Accounts need to be created");
-        require(storeExist == true, "you need to own a store to list products");
-        require(msg.sender == _seller , "you need to be a seller");
         Product memory newProduct = Product({
             buyer: address(0),
             seller: msg.sender,

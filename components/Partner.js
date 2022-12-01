@@ -19,7 +19,6 @@ const Partner = () => {
             <Image className='lg:h-[80px] h-[30px] w-[30px] lg:w-[80px]' src={chelsea}  alt='polygon' />
             <Image className='lg:h-[80px] h-[30px] w-[30px] lg:w-[80px]' src={metamask}  alt='polygon' />
             <Image className='lg:h-[140px] h-[80px] w-[80px] lg:w-[140px]' src={coinbase} alt='polygon' />
-            <Image className='lg:h-[140px] h-[80px] w-[80px] lg:w-[140px]' width={30} height={30} src='https://ipfs.io/ipfs/QmTTzFzbbKtDXHvm6bNoUBNi9qdEVkHnHqECzhTLuTBCjz' />
             </div>
 
         </div>

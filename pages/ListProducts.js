@@ -1,8 +1,12 @@
 import React, { useState, useContext } from "react";
 import Navbar from "../components/Navbar";
-import DropZone from "../components/DropZone";
 import { Uploader } from "uploader";
 import { MarketPrideContext } from "../context/MarketPrideContext";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { contractAbi, contractAddress } from "../context/constant";
+import { ethers } from "ethers";
+import { formatEther } from "ethers/lib/utils.js";
+import { formatNumber } from "../utils/apiFeature";
 
 const listproducts = () => {
   const { listProducts } = useContext(MarketPrideContext);
@@ -10,7 +14,7 @@ const listproducts = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState("");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   console.log(imgUrl);
 
@@ -32,6 +36,14 @@ const listproducts = () => {
         console.error(err);
       });
   };
+  const { config, error } = usePrepareContractWrite({
+    address: contractAddress,
+    abi: contractAbi,
+    functionName: "listNewProduct",
+    args: [formatNumber(price), rating, name, description, category, imgUrl],
+    
+  });
+  const { write } = useContractWrite(config);
   return (
     <div>
       <div className="w-screen h-screen  overflow-x-hidden">
@@ -59,7 +71,7 @@ const listproducts = () => {
                   <input
                     onChange={(e) => setPrice(e.target.value)}
                     type="number"
-                    step="0.01"
+                    step="0.001"
                     placeholder="Amount(ETH)"
                     className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
                   />
@@ -71,7 +83,7 @@ const listproducts = () => {
                   </label>
                   <input
                     onChange={(e) => setRating(e.target.value)}
-                    type="number"
+                    type="text"
                     placeholder="...Enter Rating"
                     className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
                   />
@@ -112,8 +124,9 @@ const listproducts = () => {
                 />
               </div>
               <button
+              disabled={!write}
                 onClick={async () =>
-                  listProducts(
+                  write?.(
                     price,
                     rating,
                     name,

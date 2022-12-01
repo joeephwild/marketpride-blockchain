@@ -1,6 +1,6 @@
 import MarketPride from "./MarketPride.json";
 
-export const contractAddress="0x70d2D25a9dc8829c0ab33D3F9927684570a110A2"
+export const contractAddress= "0x26bCec3f3acA2CBE6bA99F888997336299891c47"
 
 export const contractAbi = MarketPride.abi
 

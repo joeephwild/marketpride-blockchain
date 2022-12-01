@@ -86,7 +86,6 @@ contract MarketPride {
         returns(bool)
     {
         require(checkUserExists(msg.sender) == true, "Accounts need to b created");
-        require(store.length<1, "You cant create multiple store");
          Store memory market = Store({
             name: _name,
             description: _desc,

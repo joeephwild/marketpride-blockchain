@@ -8,11 +8,12 @@ const DropZone = ({ title, }) => {
     const { uploadToIpfs, setCoverImage, setImage } = useContext(MarketPrideContext)
     const [fileUrl, setFileUrl] = useState(null);
     const onDrop = useCallback(async (acceptedFile) => {
-      const url = await uploadToIpfs(acceptedFile[0]);
+      const url = await uploadToIpfs(acceptedFile[4]);
       setFileUrl(url);
       setCoverImage(url);
       setImage(url);
     });
+    console.log(fileUrl)
 
   const { getRootProps, getInputProps} = useDropzone({
     onDrop,
@@ -35,6 +36,7 @@ const DropZone = ({ title, }) => {
         <h4>Files</h4>
         <ul>{fileUrl && (
          <div>
+          <Image src={fileUrl} className='h-7 w-7' alt="image" width={20} height={20} />
           { fileUrl}
          </div>
         )}</ul>

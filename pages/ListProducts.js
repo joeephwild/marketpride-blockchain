@@ -1,67 +1,138 @@
-import React from 'react'
-import Navbar from '../components/Navbar';
-import DropZone from '../components/DropZone';
+import React, { useState, useContext } from "react";
+import Navbar from "../components/Navbar";
+import DropZone from "../components/DropZone";
+import { Uploader } from "uploader";
+import { MarketPrideContext } from "../context/MarketPrideContext";
 
 const listproducts = () => {
+  const { listProducts } = useContext(MarketPrideContext);
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [rating, setRating] = useState("");
+  const [category, setCategory] = useState("All");
+  const [imgUrl, setImgUrl] = useState("");
+  console.log(imgUrl);
+
+  const uploader = new Uploader({
+    apiKey: "public_kW15az78y4qQXTs4kwHVN73cEhoR",
+  });
+
+  const handleUploadProductImage = async () => {
+    uploader
+      .open({ multi: false })
+      .then((files) => {
+        if (files.length === 0) {
+          alert("No files selected.");
+        } else {
+          setImgUrl(files[0].fileUrl);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   return (
     <div>
-      <div className='w-screen h-screen  overflow-x-hidden'>
-      <Navbar />
-      <div className='my-16'>
-       <section className="bg-[#10100e] shadow-lg shadow-gray-400 text-white w-[500px] mx-auto px-4 py-[6px]  mt-8">
-        <span className="text-center flex justify-center mt-6 items-center text-4xl font-bold text-white">
-         Create Store
-        </span>
-          <form className='' onSubmit={(e) => {e.preventDefault();
-          uploadToIpfs();}}>
-            <div className="my-5">
-            <label htmlFor="text" className="block text-lg uppercase">
-                Name
-              </label>
-             <DropZone title='Profile Image' />
-            </div>
-            <div className="my-5">
-            <label htmlFor="text" className="block text-lg uppercase">
-                Name
-              </label>
-              <DropZone title='Cover Image' />
-            </div>
-            <div className="my-5">
-              <label htmlFor="text" className="block text-lg uppercase">
-                Name
-              </label>
-              <input
-                onChange={(e) => setName(e.target.value)}
-                type="text"
-                placeholder="...Store Name"
-                className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
-              />
-            </div>
-         
-            <div className="my-5">
-              <label htmlFor="text" className="block text-lg uppercase">
-                Description
-              </label>
-              <textarea
-                onChange={(e) => setDesc(e.target.value)}
-                type="text"
-                placeholder="...Description of Store"
-                className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
-              />
-            </div>
-            <button
-           // onClick={async() => createAStore()}
-              type="submit"
-              className="bg-[#FFFFE3] shadow-lg  shadow-gray-400 text-[#10100e] px-6 py-3.5 rounded-lg"
-            >
-              Create
-            </button>
-          </form>
-      </section>
+      <div className="w-screen h-screen  overflow-x-hidden">
+        <Navbar />
+        <div className="my-16">
+          <section className="bg-[#10100e] my-6 shadow-sm shadow-gray-400 text-white w-[500px] mx-auto px-4 py-[6px]  mt-8">
+            <span className="text-center flex justify-center mt-6 items-center text-4xl font-bold text-white">
+              List Products
+            </span>
+            <form className="" onSubmit={(e) => e.preventDefault()}>
+              <div className="flex flex-col items-center my-5">
+                <span className="text-3xl font-bold mb-3">Image</span>
+                <button
+                  className="bg-[#FFFFE3] px-8 py-4 rounded-sm text-[#10100e]"
+                  onClick={handleUploadProductImage}
+                >
+                  Upload Product image
+                </button>
+              </div>
+              <div className="flex space-x-3 items-center">
+                <div className="my-5">
+                  <label htmlFor="text" className="block text-sm uppercase">
+                    Product Image
+                  </label>
+                  <input
+                    onChange={(e) => setPrice(e.target.value)}
+                    type="number"
+                    step="0.01"
+                    placeholder="Amount(ETH)"
+                    className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
+                  />
+                </div>
+
+                <div className="my-5">
+                  <label htmlFor="text" className="block text-sm uppercase">
+                    Product Image
+                  </label>
+                  <input
+                    onChange={(e) => setRating(e.target.value)}
+                    type="number"
+                    placeholder="...Enter Rating"
+                    className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
+                  />
+                </div>
+              </div>
+
+              <div className="my-5">
+                <label htmlFor="text" className="block text-sm uppercase">
+                  Product Name
+                </label>
+                <input
+                  onChange={(e) => setName(e.target.value)}
+                  type="text"
+                  placeholder="...Products Name"
+                  className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
+                />
+              </div>
+              <div className="my-5">
+                <label htmlFor="text" className="block text-sm uppercase">
+                  Product Image
+                </label>
+                <input
+                  onChange={(e) => setDescription(e.target.value)}
+                  type="text"
+                  placeholder="...Add a description"
+                  className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
+                />
+              </div>
+              <div className="my-5">
+                <label htmlFor="text" className="block text-sm uppercase">
+                  Categories
+                </label>
+                <input
+                  onChange={(e) => setCategory(e.target.value)}
+                  type="text"
+                  placeholder="...categories"
+                  className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
+                />
+              </div>
+              <button
+                onClick={async () =>
+                  listProducts(
+                    price,
+                    rating,
+                    name,
+                    description,
+                    category,
+                    imgUrl
+                  )
+                }
+                type="submit"
+                className="bg-[#FFFFE3] shadow-sm  shadow-gray-400 text-[#10100e] px-6 py-3.5 rounded-sm"
+              >
+                Create
+              </button>
+            </form>
+          </section>
+        </div>
       </div>
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default listproducts
+export default listproducts;

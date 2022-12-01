@@ -3,14 +3,13 @@ import logo from "../public/images/favicon.svg";
 import avatar from "../public/images/avatar.png";
 import Image from "next/image";
 import { AiOutlineMenu, AiFillShopping } from "react-icons/ai";
-import Modal from "./Modal";
 import { MarketPrideContext } from "../context/MarketPrideContext";
 import NavMenu from "./NavMenu";
 import Account from "./Account";
 import Link from "next/link";
 
 const Navbar = () => {
-  const { connectWallet, accountCreated, currentAccount, currentUserName } =
+  const { connectWallet, accountCreated, currentAccount,userName } =
     useContext(MarketPrideContext);
   const [openNav, setOpenNav] = useState(false);
   const [open, setOpen] = useState(false);
@@ -82,43 +81,35 @@ const Navbar = () => {
                 </button>
                 </Link>
               </div>
-            {currentAccount ? (
-              <div>
-                <button
-                  onClick={connectWallet}
-                  className=" bg-[#10100e] flex items-center text-sm text-[#FFFFE3] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
+               {currentAccount ? (
+                <div >
+                  <button
+                  className="text-sm bg-[#10100e] flex items-center text-[#FFFFE3] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
                 >
-                  <Image
-                    src={avatar}
-                    className="rounded-full"
-                    width={20}
-                    height={20}
-                    alt="profile"
-                  />
-                  <small>
-                    {currentAccount.slice(0, 7)}...{currentAccount.slice(38, 42)}
-                  </small>
+                  <Image src={avatar} className='h-6 w-6' />
+                  <small>{currentAccount.slice(0, 5)}...{currentAccount.slice(38, 46)}</small>
                 </button>
-              </div>
-            ) : (
-              <div>
-                <button
-                  onClick={connectWallet}
+                </div>
+               ): (
+                <div>
+                  <button
+                  onClick={() => connectWallet()}
                   className="text-sm bg-[#10100e] text-[#FFFFE3] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
                 >
                   <small>Connect</small>
                 </button>
+                </div>
+               )}
+              <div className="text-[6px]">
               </div>
-            )}
+
           </div>
         </div>
         <div onClick={() => setOpenNav(true)} className=" xl:hidden block">
           <AiOutlineMenu size={24} />
         </div>
       </nav>
-      {openModal && (
-        <Modal title="Create Store" button="Create" close={setOpenModal} />
-      )}
+
 
       {openNav && <NavMenu setOpen={setOpenNav} setModal={setOpenModal} />}
 

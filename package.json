@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^0.8.0",
-    "@wagmi/core": "^0.7.5",
     "axios": "^1.2.0",
     "dotenv": "^16.0.3",
     "framer-motion": "^7.6.12",
@@ -21,6 +20,8 @@
     "react-dropzone": "^14.2.3",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.6.0",
+    "uploader": "^2.2.2",
+    "wagmi": "^0.8.8",
     "web3modal": "^1.9.10"
   },
   "devDependencies": {

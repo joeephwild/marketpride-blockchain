@@ -1,24 +1,25 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useRef } from "react";
 import { useRouter } from "next/router";
-import { toast } from "react-hot-toast";
+import { useAccount } from "wagmi";
 import { connectingWithSmartContract } from "../utils/apiFeature";
 import axios from "axios";
 import { create as ipfsHttpClient } from "ipfs-http-client";
-
+import { ethers } from "ethers";
 export const MarketPrideContext = React.createContext();
-//ipfs configuration 
-const subdomain = "https://ipfs.infura.io:5001/api/v0"
-const INFURA_ID ="2IBwaq8gyu2aOFDFSRUPMSR8cvK"
-const INFURA_SECRET_KEY ="b412376181ed1cf360898eaed01e2f8c"
+//ipfs configuration
+const subdomain = "https://ipfs.io/api/v0";
+const INFURA_ID = "2IBwaq8gyu2aOFDFSRUPMSR8cvK";
+const INFURA_SECRET_KEY = "b412376181ed1cf360898eaed01e2f8c";
 const auth =
-    'Basic ' + Buffer.from(INFURA_ID + ':' + INFURA_SECRET_KEY).toString('base64');
+  "Basic " +
+  Buffer.from(INFURA_ID + ":" + INFURA_SECRET_KEY).toString("base64");
 const client = ipfsHttpClient({
-    host: 'ipfs.infura.io',
-    port: 5001,
-    protocol: 'https',
-    headers: {
-        authorization: auth,
-    },
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+  headers: {
+    authorization: auth,
+  },
 });
 
 export const MarketPrideProvider = ({ children }) => {
@@ -27,64 +28,105 @@ export const MarketPrideProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState("");
   const [store, setStore] = useState([]);
-  const [ifUserExist, setIfUserExist] = useState(false)
-  const [ifStoreUserExist, setIfStoreUserExist] = useState(false)
-  const [currentAccount, setCurrentAccount] = useState('')
-  const [currentUserName, setCurrentUserName] = useState('')
-  const [userStore, setUserStore] = useState({});
+  const [ifUserExist, setIfUserExist] = useState(false);
+  const [ifStoreUserExist, setIfStoreUserExist] = useState(false);
+  const [currentAccount, setCurrentAccount] = useState("");
+  //const [currentUserName, setCurrentUserName] = useState(null);
+  const [userName, setUserName] = useState("");
+  const [userStore, setUserStore] = useState([]);
   const [product, setProduct] = useState([]);
-  const [image, setImage] = useState(null);
-  const [coverImage, setCoverImage] = useState(null);
+  const [singleStore, setSingle] = useState({});
+  //const [coverImage, setCoverImage] = useState('');
   const router = useRouter();
+
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (!isMounted.current) return;
+    console.log("Should load only once");
+    getConnectWallet();
+    addWalletListener();
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (isMounted.current) return;
+    isMounted.current = true;
+  }, []);
 
   //Fetch data on page load
   const fetchData = async () => {
     try {
-       //GET CONTRACT
-    const contract = await connectingWithSmartContract();
-    //GET ACCOUNT
-    
-    //GET USER NAME
-    const user = await contract.getUsername(currentAccount);
-    setCurrentUserName(user);
-    //check if user exist
-    const ifExist = await contract.checkUserExists(currentAccount);
-    setIfUserExist(ifExist);
-    //get all user stores
-    const allStore = await contract.getAllUserStoreAndProducts(currentAccount);
-    setUserStore(allStore);
-    //get if store exist
-    const storeExist = await contract.getIfStoreExist();
-    setIfStoreUserExist(storeExist);
-    //fetch all stores
-    const stores = await contract.getAllStore();
-    setStore(stores);
-    //fetch all products
-    const products = await contract.getAllProduct();
-     setProduct(products);
+      //check if user exist
+      setIfUserExist(doesUserExist);
+      //get all user stores and products
+      setUserStore(fetchAllUserStoreAndProducts);
+      //get if store exist
+      setIfStoreUserExist(doesStoreExist);
+      //fetch all stores
+      setStore(fetchAllStores);
+      //fetch all products
+      setProduct(fetchAllProducts);
+      //getusername
+      setUserName(getUsername);
     } catch (error) {
-      alert('error from useEffect')
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    getConnectWallet();
-    addWalletListener();
-    //fetchData();
-  }, []);
+  useEffect(() => {}, []);
 
-  //CONNECT WALLET
-  const connectWallet = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-      try {
-        const account = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        setCurrentAccount(account[0]);
-      } catch (error) {
-        console.log("no network");
-      }
+  //fetch user store
+  const fetchAllStores = async () => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const stores = await contract.getAllStore();
+      console.log(stores);
+      return stores;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchAllUserStoreAndProducts = async () => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const allStore = await contract.getAllUserStoreAndProducts(
+        currentAccount
+      );
+      return allStore;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchAllProducts = async () => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const products = await contract.getAllProduct();
+      return products;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const doesUserExist = async () => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const ifExist = await contract.checkUserExists(currentAccount);
+      return ifExist;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const doesStoreExist = async () => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const storeExist = await contract.getIfStoreExist();
+      return storeExist;
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -119,6 +161,32 @@ export const MarketPrideProvider = ({ children }) => {
     }
   };
 
+  const connectWallet = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      try {
+        const account = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setCurrentAccount(account[0]);
+      } catch (error) {
+        console.log("no network");
+      }
+    }
+  };
+  /* */
+
+  const getUsername = async () => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const getCreatedUsername = await contract.getUsername(currentAccount);
+      console.log(getCreatedUsername);
+      return getCreatedUsername;
+    } catch (error) {
+      console.log(error);
+      setError("Error while creating your store Please reload browser");
+    }
+  };
+
   //Create an Account
   const accountCreated = async (name, accountAddress) => {
     try {
@@ -131,36 +199,41 @@ export const MarketPrideProvider = ({ children }) => {
       await getCreatedUser.wait();
       setLoading(false);
       window.location.reload();
+      setCurrentUserName(getCreatedUser);
     } catch (error) {
       setError("Error while creating your account Please reload browser");
     }
   };
 
   const createAStore = async (name, description, imageUrl, coverImage) => {
-    if (!name || !description || !imageUrl || !coverImage) {
-      alert("hey fill details up");
-      try {
-        // if (name || accountAddress)
-        //   return setError("Name And AccountAddress, cannot be emty");
-  
-        const contract = await connectingWithSmartContract();
-        const getCreatedStore = await contract.createStore(name);
-        setLoading(true);
-        await getCreatedStore.wait();
-        setLoading(false);
-        window.location.reload();
-        router.push('/listproducts')
-      } catch (error) {
-        setError("Error while creating your store Please reload browser");
-      }
-    } else {
-      alert("hey comeon");
+    try {
+      const contract = await connectingWithSmartContract();
+      const createStores = await contract.createStore(
+        name,
+        description,
+        imageUrl,
+        coverImage
+      );
+      router.push("/listproducts");
+      return createStores;
+    } catch (error) {
+      console.log(error);
+      setError("Error while creating your store Please reload browser");
     }
   };
-  /**/
 
-   //List Products
-   const ListProducts = async (
+  /*const uploadToIpfs = async (file) => {
+    try {
+      const added = await client.add({ content: file });
+      const url = `https://ipfs.io/ipfs/${added.path}`;
+      return url;
+    } catch (error) {
+      setError("Error Uploading to IPFS");
+    }
+  };*/
+
+  //List Products
+  const listProducts = async (
     seller,
     price,
     rating,
@@ -173,6 +246,7 @@ export const MarketPrideProvider = ({ children }) => {
       alert("Pls provide necessary details");
       const contract = await connectingWithSmartContract();
       const getListedProducts = await contract.listNewProduct(
+        seller,
         price,
         rating,
         name,
@@ -181,45 +255,26 @@ export const MarketPrideProvider = ({ children }) => {
         imgUrl
       );
       alert("products listed sucessfully");
-      return {
-        price,
-        rating,
-        name,
-        description,
-        category,
-        imgUrl,
-      };
+      return getListedProducts;
     } else {
-      alert("something went wrong");
+      alert("something went wrong while listing products");
     }
   };
 
   //upload to ipfs
-  const uploadToIpfs = async (file) => {
-    try {
-      const added = await client.add({ content: file });
-      const url = `https://ipfs.infura.io:5001/ipfs/${added.path}`;
-      return url;
-    } catch (error) {
-      setError("Error Uploading to IPFS");
-    }
-  };
- 
 
   return (
     <MarketPrideContext.Provider
       value={{
-        connectWallet,
         walletAddress,
         accountCreated,
         account,
         createAStore,
-        uploadToIpfs,
+        //uploadToIpfs,
         currentAccount,
-        coverImage,
-        setCoverImage,
-        image,
-        setImage,
+        connectWallet,
+        userName,
+        listProducts,
       }}
     >
       {children}
@@ -240,5 +295,3 @@ const tx = await contract.safeTransferFrom(from, to, tokenId, amount, [], {
   gasLimit: 100000,
   nonce: nonce || undefined,
 }); */
-
-

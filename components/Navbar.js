@@ -31,7 +31,7 @@ const Navbar = () => {
       links: "/",
     },
     {
-      menu: "My stores",
+      menu: "My store",
       links: "/mystore",
     },
     {
@@ -40,7 +40,7 @@ const Navbar = () => {
     },
     {
       menu: "Stores",
-      links: "/stores",
+      links: "/allstores",
     },
     {
       menu: "Faq",

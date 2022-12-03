@@ -29,8 +29,6 @@ const getStores = async () => {
   return (
     <div className='col-span-6 '>
         <div className='flex space-x-9 items-center justify-center'>
-            <span>Stores</span>
-            <span>Products</span>
         </div>
         <div className='w-full grid grid-cols-4'>
             {store.map((items, i) => (

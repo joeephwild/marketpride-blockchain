@@ -10,7 +10,7 @@ import { useContext } from 'react'
 
 export default function Home() {
   const{}= useContext(MarketPrideContext)
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {

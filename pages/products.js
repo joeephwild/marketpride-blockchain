@@ -32,7 +32,7 @@ const products = () => {
   return (
     <div>
       <Navbar />
-      <div className=" max-h-screen overflow-hidden lg:max-w-6xl">
+      <div className=" max-h-screen lg:max-w-6xl">
         <div className="hidden sm:flex  items-center rounded-md justify-center h-26 cursor-pointer">
           <input
             type="text"

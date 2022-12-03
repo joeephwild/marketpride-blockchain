@@ -36,7 +36,7 @@ const listproducts = () => {
         console.error(err);
       });
   };
-
+  const prices = parseInt(price).toString()
   const { config, error } = usePrepareContractWrite({
     address: contractAddress,
     abi: contractAbi,

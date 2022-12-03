@@ -36,12 +36,12 @@ const listproducts = () => {
         console.error(err);
       });
   };
+
   const { config, error } = usePrepareContractWrite({
     address: contractAddress,
     abi: contractAbi,
     functionName: "listNewProduct",
     args: [formatNumber(price), rating, name, description, category, imgUrl],
-    
   });
   const { write } = useContractWrite(config);
   return (
@@ -76,7 +76,6 @@ const listproducts = () => {
                     className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
                   />
                 </div>
-
                 <div className="my-5">
                   <label htmlFor="text" className="block text-sm uppercase">
                     Product Image
@@ -89,7 +88,6 @@ const listproducts = () => {
                   />
                 </div>
               </div>
-
               <div className="my-5">
                 <label htmlFor="text" className="block text-sm uppercase">
                   Product Name

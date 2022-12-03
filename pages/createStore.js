@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { MarketPrideContext } from "../context/MarketPrideContext";
 import Navbar from "../components/Navbar";
 import { Uploader } from "uploader";
 import {  useAccount, useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
 import { contractAbi, contractAddress } from "../context/constant";
+import { useRouter } from "next/router";
+import {toast} from "react-hot-toast";
 
 const createStore = () => {
   const [desc, setDesc] = useState("");
@@ -12,6 +13,8 @@ const createStore = () => {
   const [image, setImage] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const { address} = useAccount()
+  const router = useRouter()
+
   const uploader = new Uploader({
     apiKey: "public_kW15az78y4qQXTs4kwHVN73cEhoR",
   });
@@ -32,7 +35,7 @@ const createStore = () => {
       });
   };
 
-  const { config, error } = usePrepareContractWrite({
+  const { config } = usePrepareContractWrite({
     address: contractAddress,
     abi: contractAbi,
     functionName: 'createStore',
@@ -91,7 +94,6 @@ const createStore = () => {
               />
             </div>
             <button
-            disabled={!write}
               onClick={async () => write?.(name, desc, image, coverImage)}
               type="submit"
               className="bg-[#FFFFE3] shadow-lg  shadow-gray-400 text-[#10100e] px-6 py-3.5 rounded-lg"

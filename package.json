@@ -23,6 +23,7 @@
     "react-dropzone": "^14.2.3",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.6.0",
+    "react-responsive-carousel": "^3.2.23",
     "uploader": "^2.2.2",
     "wagmi": "^0.8.8",
     "web3modal": "^1.9.10",

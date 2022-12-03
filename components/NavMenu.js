@@ -2,6 +2,7 @@ import React from "react";
 import avatar from "../public/images/avatar.png";
 import Image from "next/image";
 import { AiFillShopping, AiOutlineClose } from "react-icons/ai";
+import { Web3Button } from "@web3modal/react";
 
 const NavMenu = ({ setOpen, address, setModal }) => {
   const menuItems = [
@@ -10,15 +11,15 @@ const NavMenu = ({ setOpen, address, setModal }) => {
       links: "/",
     },
     {
-      menu: "Shop",
+      menu: "My stores",
       links: "/",
     },
     {
-      menu: "Top Sellers",
+      menu: "products",
       links: "/",
     },
     {
-      menu: "Manage Store",
+      menu: "Stores",
       links: "/",
     },
     {
@@ -63,6 +64,9 @@ const NavMenu = ({ setOpen, address, setModal }) => {
                 <small>List product</small>
               </button>
             </div>
+            <div className="text-[6px] flex justify-center mt-5 items-center">
+              <Web3Button />
+              </div>
           </div>
         </div>
       </div>

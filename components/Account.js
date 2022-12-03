@@ -1,20 +1,35 @@
 import React, { useContext, useState } from "react";
 import { AiOutlineCloseSquare } from "react-icons/ai";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 import { contractAbi, contractAddress } from "../context/constant";
+import { toast } from 'react-hot-toast'
 
 const Account = ({ setClose, account, functionName }) => {
   const [name, setName] = useState("");
   const [accountAddress, setAccountAddress] = useState("");
+  const { address } = useAccount()
 
-  const { config, error } = usePrepareContractWrite({
+  const { config, error, isSuccess, isLoading } = usePrepareContractWrite({
     address: contractAddress,
     abi: contractAbi,
     functionName: 'createAccount',
     args: [name]
   })
   const { write } = useContractWrite(config)
-  console.log(config)
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (isLoading) {
+      toast.loading('Please wait');
+    }
+    if (isSuccess) {
+      setClose(false);
+      toast.success('Done');
+    }
+    if (error) {
+      toast.error("Error while creating account || or user already exist");
+    }
+  }
   return (
     <div className="fixed top-[20%] left-[30%] px-4 py-3 z-[888888] bg-[#10100e] w-[500px] h-[300px]">
       <div onClick={() => setClose(false)} className="text-[#FFFFE3]">
@@ -35,7 +50,7 @@ const Account = ({ setClose, account, functionName }) => {
           <input
            id="acccountAddress"
             type="text"
-            placeholder={account || "Enter address.."}
+            placeholder={address}
             onChange={(e) => setAccountAddress(e.target.value)}
             value={accountAddress}
             className="w-full border-2 border-[#333]  outline-none rounded-[5px] h-[50px] p-[5px]"

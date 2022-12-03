@@ -41,7 +41,7 @@ const listproducts = () => {
     address: contractAddress,
     abi: contractAbi,
     functionName: "listNewProduct",
-    args: [formatNumber(price), rating, name, description, category, imgUrl],
+    args: [parseInt(price).toString(), rating, name, description, category, imgUrl],
   });
   const { write } = useContractWrite(config);
   return (
@@ -71,7 +71,7 @@ const listproducts = () => {
                   <input
                     onChange={(e) => setPrice(e.target.value)}
                     type="number"
-                    step="0.001"
+                    step="0.01"
                     placeholder="Amount(ETH)"
                     className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
                   />

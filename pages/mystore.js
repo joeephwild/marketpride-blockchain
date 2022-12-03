@@ -2,12 +2,14 @@ import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi';
 import Navbar from '../components/Navbar';
+import UserStoreCard from '../components/UserStoreCard';
 import { contractAbi, contractAddress } from "../context/constant";
 
 const mystore = () => {
     const [userStore, setUserStore] = useState([]);
+    const [userProduct, setUserProduct] = useState([])
+    console.log(userProduct)
     const {address} = useAccount()
-    console.log(userStore)
     const fetchUserDetails = async () => {
         try {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -16,7 +18,9 @@ const mystore = () => {
             contractAbi,
             provider
           );
-          const getUserStore = await contract.getAllUserStoreAndProducts(address);
+          const getUserStore = await contract.fetchSellerStore(address);
+          const getUserProduct = await contract.fetchSellerProducts(address);
+          setUserProduct(getUserProduct)
           setUserStore(getUserStore);
         } catch (error) {
           console.log(error);
@@ -28,6 +32,11 @@ const mystore = () => {
   return (
     <div>
         <Navbar />
+        <div>
+          {userStore.map((list, i) => (
+              <UserStoreCard key={i} item={list} />
+          ))}
+        </div>
     </div>
   )
 }

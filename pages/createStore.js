@@ -9,11 +9,12 @@ import {toast} from "react-hot-toast";
 const createStore = () => {
   const [desc, setDesc] = useState("");
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const { address} = useAccount()
   const router = useRouter()
+  console.log(image)
+  console.log(coverImage)
 
   const uploader = new Uploader({
     apiKey: "public_kW15az78y4qQXTs4kwHVN73cEhoR",
@@ -26,8 +27,21 @@ const createStore = () => {
         if (files.length === 0) {
           alert("No files selected.");
         } else {
-          setCoverImage(files[0].fileUrl);
           setImage(files[0].fileUrl);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const handleUploadProductImage2 = async () => {
+    uploader
+      .open({ multi: false })
+      .then((files) => {
+        if (files.length === 0) {
+          alert("No files selected.");
+        } else {
+          setCoverImage(files[0].fileUrl);
         }
       })
       .catch((err) => {
@@ -63,7 +77,7 @@ const createStore = () => {
               <div className="flex flex-col items-center my-5">
                 <button
                   className="bg-[#FFFFE3] px-8 py-4 rounded-lg text-[#10100e]"
-                  onClick={handleUploadProductImage}
+                  onClick={handleUploadProductImage2}
                 >
                   Upload coverImage
                 </button>

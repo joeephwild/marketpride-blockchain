@@ -10,7 +10,6 @@ import { useAccount } from "wagmi";
 const products = () => {
   const { address } = useAccount()
   const [products, setProducts] = useState([]);
-  console.log(products)
   const getStores = async () => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -59,3 +58,10 @@ const products = () => {
 };
 
 export default products;
+//how to send ether from a smart contracts using ethers js?
+//contractInstance.testFunction(<any function args>, { value: ethers.utils.parseUnits("1", "ether") });
+
+
+
+
+

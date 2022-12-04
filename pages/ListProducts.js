@@ -71,7 +71,7 @@ const listproducts = () => {
                   <input
                     onChange={(e) => setPrice(e.target.value)}
                     type="number"
-                    step="0.01"
+                    step="1"
                     placeholder="Amount(ETH)"
                     className="w-full border-2 text-black border-[#333] outline-none rounded-[5px] h-[50px] p-[5px]"
                   />
@@ -101,7 +101,7 @@ const listproducts = () => {
               </div>
               <div className="my-5">
                 <label htmlFor="text" className="block text-sm uppercase">
-                  Product Image
+                  Product Description
                 </label>
                 <input
                   onChange={(e) => setDescription(e.target.value)}

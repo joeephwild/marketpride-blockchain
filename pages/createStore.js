@@ -59,8 +59,8 @@ const createStore = () => {
   return (
     <div className="w-screen h-screen  overflow-x-hidden">
       <Navbar />
-      <div className="my-16">
-        <section className="bg-[#10100e] shadow-lg shadow-gray-400 text-white w-[500px] mx-auto px-4 py-[6px]  mt-8">
+      <div className="my-9">
+        <section className="bg-[#10100e] shadow-lg shadow-gray-400 text-white w-[400px] lg:w-[500px] mx-auto px-4 py-[6px]  mt-8">
           <span className="text-center flex justify-center mt-6 items-center text-4xl font-bold text-white">
             Create Store
           </span>

@@ -6,7 +6,7 @@ const Service = ({ image, title, text }) => {
     <div>
       <div className="flex bg-[#10100e] text-[#fffffe] max-h-[300px] mx-6 rounded-lg px-4 flex-col my-6 items-start md:items-center space-y-3">
         <Image
-          className="hover:scale-125 animate-bounce transition-all ease-in-out"
+          className="hover:scale-125  transition-all ease-in-out"
           src={image}
           width={80}
           height={80}

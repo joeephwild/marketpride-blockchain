@@ -4,7 +4,6 @@ pragma solidity ^0.8.9;
 //import "hardhat/console.sol";
 
 contract MarketPride {
-    uint256 transactionCount;
     uint256 productCounter;
     uint256 storeCounter;
     address payable buyer;
@@ -12,7 +11,7 @@ contract MarketPride {
 
     struct Product {
         address buyer;
-        address seller;
+        address  seller;
         uint256 id;
         uint256 price;
         uint256 rating;
@@ -20,13 +19,6 @@ contract MarketPride {
         string description;
         string category;
         string imgUrl;
-    }
-
-     struct Purchased {
-        address buyer;
-        address seller;
-        uint productId;
-        uint productAmount;
     }
 
     //creating an object of all store
@@ -41,12 +33,12 @@ contract MarketPride {
 
     struct User {
         string name;
-        address account;
+        address payable account;
     }
 
     struct AllUserStruct{
         string name;
-        address accountAddress;
+        address  accountAddress;
     }
 
     AllUserStruct[] getAllUsers;
@@ -125,27 +117,6 @@ contract MarketPride {
         product[productCounter] = newProduct;
         productCounter++;
         products.push(newProduct);
-    }
-
-       Purchased[] transactions;
-
-    //function add to blockchain 
-    function addToBlockchain(address _seller, uint256 _productId, uint256 _productAmount) public {
-        transactionCount+= 1;
-        transactions.push(Purchased({
-            buyer: msg.sender,
-            productId: _productId,
-             productAmount: _productAmount,
-             seller: _seller
-        }));
-    }
-    
-    function getAllTransaction() public view returns(Purchased[] memory){
-        return transactions;
-    }
-
-    function getAllTransactionCount() public view returns(uint256){
-        return transactionCount;
     }
    //payable for the products in a store
   function payForProducts(

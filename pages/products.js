@@ -44,10 +44,10 @@ const products = () => {
           <span className="col-span-2">
             <Categories />
           </span>
-          <span className="lg:col-span-7 col-span-9 grid lg:grid-cols-4 grid-cols-2 gap-3">
+          <span className="lg:col-span-7 col-span-9 grid lg:grid-cols-4 grid-cols-2 gap-7">
             {products.map((item, i) => (
                 <div  className='4'>
-                      <ProductCard key={i + 1} product={item}/>
+                      <ProductCard key={i + 1} index={i} product={item}/>
                 </div>
             ))}
           </span>

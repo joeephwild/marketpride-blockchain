@@ -5,7 +5,7 @@ import { AiFillShopping, AiOutlineClose } from "react-icons/ai";
 import { Web3Button } from "@web3modal/react";
 import Link from "next/link";
 
-const NavMenu = ({ setOpen, address, setModal }) => {
+const NavMenu = ({ setOpen, address, setOpenN }) => {
   const menuItems = [
     {
       menu: "Home",
@@ -30,7 +30,6 @@ const NavMenu = ({ setOpen, address, setModal }) => {
   ];
 
   const handleClick = () => {
-    setModal(true);
     setOpen(false);
   };
   return (
@@ -54,10 +53,10 @@ const NavMenu = ({ setOpen, address, setModal }) => {
           <div>
             <div className="flex space-x-3 items-center">
               <button
-                onClick={handleClick}
+                onClick={() => setOpenN(true)}
                 className="text-lg bg-[#FFFFE3] text-[#10100e] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
               >
-                <small>Create Store</small>
+                <small>Create Account</small>
               </button>
               <Link href="/listproducts">
                 <button className="text-lg bg-[#FFFFE3] text-[#10100e] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300">

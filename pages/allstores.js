@@ -13,7 +13,7 @@ const allstores = () => {
               <input type="text" className="p-2 border-2 border-[#10100e] h-full w-[60%]  rounded-l-md focus:outline-none px-4"/>
              <FaSearch className="h-fit w-fit bg-[#10100E] text-white p-4"/>
           </div>
-          <div>
+          <div className='grid grid-cols-2 md:grid-cols-4'>
             <Stores />
           </div>
         </div>

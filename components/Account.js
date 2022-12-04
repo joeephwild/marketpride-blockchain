@@ -19,7 +19,7 @@ const Account = ({ setClose, account, functionName }) => {
   const { write, error } = useContractWrite(config);
   return (
     <div>
-    <div className="fixed top-[20%] left-[30%] px-4 py-3 z-[888888] bg-[#10100e] w-[500px] h-[300px]">
+    <div className="fixed top-[20%] left-[10%] lg:left-[30%] px-4 py-3 z-[888888] bg-[#10100e] w-[400px] lg:w-[500px] h-[300px]">
       <div onClick={() => setClose(false)} className="text-[#FFFFE3]">
         <AiOutlineCloseSquare />
       </div>

@@ -7,12 +7,12 @@ const StoreCard = ({item}) => {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
   }
   return (
-    <div>
-       <div className="md:max-w-[250px] max-w-[150px] h-[350px] mx-auto rounded-lg bg-[#10100e] container">
-        <img src={item.imageUrl} className="h-52 w-full overflow-hidden object-fit lg:object-cover" />
-        <div className="flex items-center w-fit space-y-2  px-1.5 text-[#fffffe] flex-col">
-          <span className="text-lg text-center font-bold">{truncate(item.name, 19)}</span>
-          <span className='text-[#fffffe] text-sm'>{item.creator.slice(1,9)}...{item.creator.slice(38, 49)}</span>
+    <div className='mt-9 mx-auto'>
+       <div className="md:max-w-[210px] w-[82%] mx-6 rounded-lg bg-[#10100e] container">
+        <img src={item.imageUrl} className="h-52 w-full overflow-hidden  lg:object-cover" />
+        <div className="flex items-center justify-center w-fit py-2 space-y-2.5 px-1.5 text-[#fffffe] flex-col">
+          <span className="text-lg flex items-center justify-center font-bold">{truncate(item.name, 19)}</span>
+          <span className='bg-[#fffffe] text-[#10100e] px-2 py-1.5 text-sm'>{item.creator.slice(1,9)}...{item.creator.slice(30, 49)}</span>
           <span className="text-xs text-wrap ">{truncate(item.description, 29)}</span>
           <div className="flex items-center px-3 justify-between w-full">
           </div>

@@ -22,6 +22,7 @@ const Navbar = () => {
   const [name, setName] = useState("");
   const { createAnAccount } = useContext(MarketPrideContext);
   const [openNav, setOpenNav] = useState(false);
+  const [modal, setModa] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(1);
   const { address } = useAccount();
@@ -47,9 +48,9 @@ const Navbar = () => {
       links: "/",
     },
   ];
-  return (
-    <div>
-      <nav className="w-lg  cursor-pointer flex items-center justify-between py-2 px-2.5">
+  return ( 
+    <div className="fixed mb-9 w-full">
+      <nav className=" bg-[#FFFFE3] cursor-pointer flex items-center justify-between py-2 px-2.5">
         {/* Menu Links */}
         <div className="xl:flex items-center  text-sm font-bold space-x-4 hidden">
           {menuItems.map((link, i) => (
@@ -99,7 +100,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {openNav && <NavMenu setOpen={setOpenNav} />}
+      {openNav && <NavMenu setOpen={setOpenNav} setOpenN={setOpen} />}
 
       {open ? (
         <Account setClose={setOpen}  />

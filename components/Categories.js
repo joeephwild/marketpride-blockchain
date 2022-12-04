@@ -17,7 +17,7 @@ const Categories = () => {
               key={index}
               className="flex flex-col items-center space-y-4 font-medium"
             >
-              <span className="text-[#FFFFE3]">{items.name}</span>
+              <span className="text-[#FFFFE3] text-sm hover:bg-gray-500 hover:px-4 hover:py-2.5 hover:rounded-lg">{items.name}</span>
             </div>
           );
         })}

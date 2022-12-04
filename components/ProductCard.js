@@ -5,29 +5,12 @@ import React, { useEffect, useState } from "react";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 import { contractAbi, contractAddress } from "../context/constant";
 import matic from "../public/images/matic.webp";
+import { formatNumber } from "../utils/apiFeature";
 
-const ProductCard = ({ product }) => {
-  console.log(product.price);
-  const [errors, setErrors] = useState([])
+const ProductCard = ({ product, index }) => {
   const { address } = useAccount();
-  const payProduct = async () => {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const signer = provider.getSigner()
-      const transactionsContract = new ethers.Contract(
-        contractAddress,
-        contractAbi,
-        signer,
-       )
-       const tx = await transactionsContract.payForProducts({
-        to: product.seller,
-        value: parseInt(product.price).toString(),
-        id: product.id
-    })
-    return tx;
-    } catch (error) {
-    }
-  };
+ console.log(index)
+ 
 const price = parseInt(product.price).toString()
   const { config } = usePrepareContractWrite({
     address: contractAddress,
@@ -35,9 +18,11 @@ const price = parseInt(product.price).toString()
     functionName: "payForProducts",
     overrides: {
       from: address,
-      value: ethers.utils.parseUnits(price, 10),
+      value: ethers.utils.parseEther(price),
+      gasLimit: 21000,
+
     },
-    args: [product.id],
+    args: [index],
   });
 
   const { write, error } = useContractWrite(config);
@@ -66,12 +51,12 @@ const price = parseInt(product.price).toString()
             <div className="flex items-center space-x-2">
               <strong className="text-xs">
               
-              {((product.price / 10 ** 5) * 500).toFixed(5)}
+              {((product.price / 10 ** 5)).toFixed(5)}
               </strong>{" "}
               <Image src={matic} className="h-5 w-5 object-contain" />
             </div>
             <button
-              onClick={() => write?.(product.id)}
+              onClick={() => write?.(index, product.seller)}
               className="bg-[#fffffe] text-sm text-[#10100e] px-2.5 py-1 rounded-lg"
             >
               Buy

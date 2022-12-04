@@ -20,7 +20,6 @@ const price = parseInt(product.price).toString()
       from: address,
       value: ethers.utils.parseEther(price),
       gasLimit: 21000,
-
     },
     args: [index],
   });

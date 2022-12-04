@@ -13,7 +13,7 @@ const NavMenu = ({ setOpen, address, setOpenN }) => {
     },
     {
       menu: "My stores",
-      links: "/mystore",
+      links: "/",
     },
     {
       menu: "products",
@@ -53,7 +53,8 @@ const NavMenu = ({ setOpen, address, setOpenN }) => {
           <div>
             <div className="flex space-x-3 items-center">
               <button
-                onClick={() => setOpenN(true)}
+                onClick={() =>
+                  setOpenN(true)}
                 className="text-lg bg-[#FFFFE3] text-[#10100e] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300"
               >
                 <small>Create Account</small>

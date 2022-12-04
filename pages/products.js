@@ -47,7 +47,7 @@ const products = () => {
           <span className="lg:col-span-7 col-span-9 grid lg:grid-cols-4 grid-cols-2 gap-7">
             {products.map((item, i) => (
                 <div  className='4'>
-                      <ProductCard key={i + 1} index={i} product={item}/>
+                      <ProductCard key={i + 1} index={ i + 1} product={item}/>
                 </div>
             ))}
           </span>

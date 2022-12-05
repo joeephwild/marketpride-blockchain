@@ -19,7 +19,6 @@ const price = parseInt(product.price).toString()
     overrides: {
       from: address,
       value: ethers.utils.parseUnits(price),
-      gasLimit: 21000,
     },
     args: [index],
   });

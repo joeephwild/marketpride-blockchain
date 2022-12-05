@@ -80,7 +80,7 @@ const Navbar = () => {
             >
               Create Account
             </button>
-            <Link href="/listproducts">
+            <Link href="/create">
               <button className="text-sm bg-[#10100e] text-[#FFFFE3] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300">
                 <small>List Product</small>
               </button>

@@ -8,46 +8,47 @@ import { ethers } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
 import { formatNumber } from "../utils/apiFeature";
 
-const listproducts = () => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [rating, setRating] = useState("");
-  const [category, setCategory] = useState("");
-  const [imgUrl, setImgUrl] = useState("");
-  const { address } = useAccount();
-  console.log(imgUrl);
 
-  const uploader = new Uploader({
-    apiKey: "public_kW15az78y4qQXTs4kwHVN73cEhoR",
-  });
-
-  const handleUploadProductImage = async () => {
-    uploader
-      .open({ multi: false })
-      .then((files) => {
-        if (files.length === 0) {
-          alert("No files selected.");
-        } else {
-          setImgUrl(files[0].fileUrl);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-  const prices = parseInt(price).toString()
-
-  const { config, isSuccess } = usePrepareContractWrite({
-    address: contractAddress,
-    abi: contractAbi,
-    functionName: "listNewProduct",
-    args: [parseInt(price).toString(), rating, name, description, category, imgUrl],
-  });
-  const { write } = useContractWrite(config)
+const create = () => {
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState("");
+    const [description, setDescription] = useState("");
+    const [rating, setRating] = useState("");
+    const [category, setCategory] = useState("");
+    const [imgUrl, setImgUrl] = useState("");
+    const { address } = useAccount();
+    console.log(imgUrl);
+  
+    const uploader = new Uploader({
+      apiKey: "public_kW15az78y4qQXTs4kwHVN73cEhoR",
+    });
+  
+    const handleUploadProductImage = async () => {
+      uploader
+        .open({ multi: false })
+        .then((files) => {
+          if (files.length === 0) {
+            alert("No files selected.");
+          } else {
+            setImgUrl(files[0].fileUrl);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+    const prices = parseInt(price).toString()
+  
+    const { config, isSuccess } = usePrepareContractWrite({
+      address: contractAddress,
+      abi: contractAbi,
+      functionName: "listNewProduct",
+      args: [parseInt(price).toString(), rating, name, description, category, imgUrl],
+    });
+    const { write } = useContractWrite(config)
   return (
     <div>
-      <div className="w-screen h-screen  overflow-x-hidden">
+         <div className="w-screen h-screen  overflow-x-hidden">
         <Navbar />
         <div className="my-9">
           <section className="bg-[#10100e] my-6 shadow-sm shadow-gray-400 text-white w-[400px] lg:w-[500px] mx-auto px-4 py-[6px]  mt-8">
@@ -144,7 +145,7 @@ const listproducts = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default listproducts;
+export default create

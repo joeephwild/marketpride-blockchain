@@ -59,7 +59,7 @@ const NavMenu = ({ setOpen, address, setOpenN }) => {
               >
                 <small>Create Account</small>
               </button>
-              <Link href="/listproducts">
+              <Link href="/create">
                 <button className="text-lg bg-[#FFFFE3] text-[#10100e] px-3 py-2 rounded-lg hover:shadow-sm hover:shadow-gray-300">
                   <small>List product</small>
                 </button>

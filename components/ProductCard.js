@@ -54,7 +54,7 @@ const price = parseInt(product.price).toString()
               <Image src={matic} className="h-5 w-5 object-contain" />
             </div>
             <button
-              onClick={() => write?.(index, product.seller)}
+              onClick={() => write?.(index)}
               className="bg-[#fffffe] text-sm text-[#10100e] px-2.5 py-1 rounded-lg"
             >
               Buy
